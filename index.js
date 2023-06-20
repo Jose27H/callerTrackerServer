@@ -25,9 +25,7 @@ db.serialize(() => {
   `);
 });
 
-app.get("/", (req, res) => {
-  res.send('hw');
-});
+
 
 // Endpoint for handling form submissions
 app.post('/api/form', (req, res) => {
