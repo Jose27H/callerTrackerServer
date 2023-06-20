@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
 app.post('/api/form', (req, res) => {
   const { name, email, phoneNumber, month, day, year, message } = req.body;
   const dob = `${month}-${day}-${year}`;
+  alert('YOO')
 
   db.run(
     'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES (?, ?, ?, ?, ?)',
