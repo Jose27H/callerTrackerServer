@@ -84,9 +84,9 @@ app.get("/api/patientData", (req, res) => {
       } else if (row) {
         // Return the patient data if found
         res.json({
-          name: "Jose Henriquez",
-          phoneNumber: '2899290055',
-          email: "josehilario27@hotmail.com",
+          name: row.name,
+          phoneNumber: row.phoneNumber,
+          email: row.email,
           message: row.message,
         });
       } else {
