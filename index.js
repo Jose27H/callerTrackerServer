@@ -11,6 +11,9 @@ const port = 5000;
 app.use(express.json());
 app.use(cors());
 
+app.get("/",(req,res)=>{
+  res.send('hw')
+})
 // Create a new SQLite database connection
 const db = new sqlite3.Database('database.db');
 db.run("DROP TABLE IF EXISTS forms");
