@@ -2,34 +2,32 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 
-
-
-
 const app = express();
-const port =process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
 
-app.get("/",(req,res)=>{
-  res.send('hw')
-})
-// Create a new SQLite database connection
-const db = new sqlite3.Database('database.db');
-db.run("DROP TABLE IF EXISTS forms");
+const db = new sqlite3.Database(':memory:'); // Use in-memory database
 
-// Create a table for storing patient data
-db.run(`
-  CREATE TABLE IF NOT EXISTS patients (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    phoneNumber TEXT,
-    email TEXT,
-    dob TEXT,
-    message TEXT
-  )
-`);
+// Initialize the database table
+db.serialize(() => {
+  db.run("DROP TABLE IF EXISTS forms");
+  db.run(`
+    CREATE TABLE IF NOT EXISTS patients (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      phoneNumber TEXT,
+      email TEXT,
+      dob TEXT,
+      message TEXT
+    )
+  `);
+});
 
+app.get("/", (req, res) => {
+  res.send('hw');
+});
 
 // Endpoint for handling form submissions
 app.post('/api/form', (req, res) => {
@@ -51,7 +49,6 @@ app.post('/api/form', (req, res) => {
   );
 });
 
-
 // Endpoint for handling phone check
 app.post('/api/formnumber', (req, res) => {
   const { number } = req.body;
@@ -63,16 +60,12 @@ app.post('/api/formnumber', (req, res) => {
     } else {
       if (row.count > 0) {
         res.status(200).json({ info: 'yes', pnumber: row.id });
-        
       } else {
         res.status(200).json({ info: 'Failed to submit form' });
       }
     }
   });
 });
-
-
-
 
 // Define a route to fetch patient data based on name
 app.get("/api/patientData", (req, res) => {
@@ -121,7 +114,6 @@ app.put("/api/updateObservations", (req, res) => {
     }
   );
 });
-
 
 // Start the server
 app.listen(port, () => {
