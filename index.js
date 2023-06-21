@@ -28,7 +28,7 @@ db.serialize(() => {
 
   const name = "John Doe";
   const email = "jdoe@gmail";
-  const phoneNumber = "111-222-3344";
+  const phoneNumber = "1112223344";
   const dob = "1998-11-27";
   const message = "";
 
@@ -39,7 +39,7 @@ db.serialize(() => {
       if (err) {
         console.error(err);
       } else {
-        console.log("Patient inserted successfully");
+        console.log("Patient " + name + " inserted successfully");
       }
     }
   );
