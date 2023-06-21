@@ -25,33 +25,34 @@ db.serialize(() => {
       message TEXT
     )
   `);
-});
 
-const name = "John Doe";
-const email = "jdoe@gmail";
-const phoneNumber = "111-222-3344";
-const dob = "1998-11-27";
-const message = "";
+  const name = "John Doe";
+  const email = "jdoe@gmail";
+  const phoneNumber = "111-222-3344";
+  const dob = "1998-11-27";
+  const message = "";
 
-db.run(
-  'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES (?, ?, ?, ?, ?)',
-  [name, phoneNumber, email, dob, message],
-  (err) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log("Patient inserted successfully");
+  db.run(
+    'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES (?, ?, ?, ?, ?)',
+    [name, phoneNumber, email, dob, message],
+    (err) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("Patient inserted successfully");
+      }
     }
-
+  );
+});
 
 app.get("/", (req, res) => {
-  res.send('hw')
+  res.send('hw');
 });
+
 // Endpoint for handling form submissions
 app.post('/api/form', (req, res) => {
   const { name, email, phoneNumber, month, day, year, message } = req.body;
   const dob = `${month}-${day}-${year}`;
-
 
   db.run(
     'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES (?, ?, ?, ?, ?)',
