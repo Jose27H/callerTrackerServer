@@ -51,7 +51,7 @@ app.get("/", (req, res) => {
 });
 
 // Endpoint for handling form submissions
-app.post('/api/form', (req, res) => {
+app.get('/api/form', (req, res) => {
   const { name, email, phoneNumber, month, day, year, message } = req.body;
   const dob = `${month}-${day}-${year}`;
 
