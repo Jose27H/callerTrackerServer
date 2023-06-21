@@ -7,7 +7,7 @@ const port = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors({
-  origin: 'callertrackerclient-production.up.railway.app/'
+  origin: 'callertrackerclient-production.up.railway.app'
 }));
 
 const db = new sqlite3.Database('database.db'); // Use in-memory database
