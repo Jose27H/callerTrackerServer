@@ -47,6 +47,7 @@ db.serialize(() => {
 
 app.get("/", (req, res) => {
   res.send('hw');
+  console.log('hscreen')
 });
 
 // Endpoint for handling form submissions
