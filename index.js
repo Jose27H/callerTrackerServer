@@ -102,12 +102,13 @@ app.get("/api/patientData", (req, res) => {
 
 // Define a route to update observations for a patient
 app.put("/api/updateObservations", (req, res) => {
+  const phoneNumber = req.body.phoneNumber;
   const observations = req.body.message;
 
-  // Update the observations in the database for the patient
+  // Update the observations in the database for the specific patient
   db.query(
-    "UPDATE patients SET message = $1",
-    [observations],
+    "UPDATE patients SET message = $1 WHERE phonenumber = $2",
+    [observations, phoneNumber],
     (err) => {
       if (err) {
         console.error(err);
@@ -119,6 +120,7 @@ app.put("/api/updateObservations", (req, res) => {
     }
   );
 });
+
 
 // Start the server
 app.listen(port, () => {
