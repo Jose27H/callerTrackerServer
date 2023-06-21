@@ -119,6 +119,7 @@ app.put("/api/updateObservations", (req, res) => {
       }
     }
   );
+  console.log("Update request received: ", phoneNumber, observations);
 });
 
 
