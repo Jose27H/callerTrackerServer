@@ -13,6 +13,24 @@ app.get("/", (req, res) => {
   console.log('hscreen')
 });
 
+
+db.query(`
+  CREATE TABLE IF NOT EXISTS patients (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    phoneNumber TEXT,
+    email TEXT,
+    dob TEXT,
+    message TEXT
+  )
+`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('Table created successfully');
+  }
+});
+
 // Endpoint for handling form submissions
 app.post('/api/form', (req, res) => {
   const { name, email, phoneNumber, month, day, year, message } = req.body;
