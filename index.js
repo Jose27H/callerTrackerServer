@@ -10,7 +10,7 @@ app.use(cors({
   origin: 'https://callertrackerclient-production.up.railway.app/'
 }));
 
-const db = new sqlite3.Database(':memory:'); // Use in-memory database
+const db = new sqlite3.Database('database.db'); // Use in-memory database
 
 // Initialize the database table
 db.serialize(() => {
