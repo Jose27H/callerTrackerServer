@@ -1,49 +1,12 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const db = require('./db'); // Assuming db.js exports the pool object
 const cors = require('cors');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use(cors({
- 
-}));
-
-const db = new sqlite3.Database('database.db'); // Use in-memory database
-
-// Initialize the database table
-db.serialize(() => {
-  db.run("DROP TABLE IF EXISTS forms");
-  db.run(`
-    CREATE TABLE IF NOT EXISTS patients (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      phoneNumber TEXT,
-      email TEXT,
-      dob TEXT,
-      message TEXT
-    )
-  `);
-
-  const name = "John Doe";
-  const email = "jdoe@gmail";
-  const phoneNumber = "1112223344";
-  const dob = "1998-11-27";
-  const message = "";
-
-  db.run(
-    'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES (?, ?, ?, ?, ?)',
-    [name, phoneNumber, email, dob, message],
-    (err) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log("Patient " + name + " inserted successfully");
-      }
-    }
-  );
-});
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send('hw');
@@ -55,15 +18,16 @@ app.post('/api/form', (req, res) => {
   const { name, email, phoneNumber, month, day, year, message } = req.body;
   const dob = `${month}-${day}-${year}`;
 
-  db.run(
-    'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES (?, ?, ?, ?, ?)',
+  db.query(
+    'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES ($1, $2, $3, $4, $5) RETURNING id',
     [name, phoneNumber, email, dob, message],
-    (err) => {
+    (err, result) => {
       if (err) {
         console.error(err);
-        res.status(200).json({ error: 'Failed to submit form' });
+        res.status(500).json({ error: 'Failed to submit form' });
       } else {
-        res.status(200).json({ message: 'Form submitted successfully' });
+        const patientId = result.rows[0].id;
+        res.status(200).json({ message: 'Form submitted successfully', patientId });
         console.log(name, email, phoneNumber, dob, message);
       }
     }
@@ -74,11 +38,12 @@ app.post('/api/form', (req, res) => {
 app.post('/api/formnumber', (req, res) => {
   const { number } = req.body;
 
-  db.get('SELECT COUNT(*) as count, id FROM patients WHERE phoneNumber = ?', [number], (err, row) => {
+  db.query('SELECT COUNT(*) as count, id FROM patients WHERE phoneNumber = $1', [number], (err, result) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to check phone number' });
     } else {
+      const row = result.rows[0];
       if (row.count > 0) {
         res.status(200).json({ info: 'yes', pnumber: row.id });
       } else {
@@ -93,14 +58,15 @@ app.get("/api/patientData", (req, res) => {
   const patientName = req.query.name;
 
   // Query the database based on the patient name
-  db.get(
-    "SELECT * FROM patients WHERE phoneNumber = ?",
+  db.query(
+    "SELECT * FROM patients WHERE phoneNumber = $1",
     [patientName],
-    (err, row) => {
+    (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: "Internal server error" });
-      } else if (row) {
+      } else if (result.rows.length > 0) {
+        const row = result.rows[0];
         // Return the patient data if found
         res.json({
           name: row.name,
@@ -121,10 +87,10 @@ app.put("/api/updateObservations", (req, res) => {
   const observations = req.body.message;
 
   // Update the observations in the database for the patient
-  db.run(
-    "UPDATE patients SET message = ?",
+  db.query(
+    "UPDATE patients SET message = $1",
     [observations],
-    function (err) {
+    (err) => {
       if (err) {
         console.error(err);
         res.status(500).json({ error: "Internal server error" });
