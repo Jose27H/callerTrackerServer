@@ -107,7 +107,7 @@ app.put("/api/updateObservations", (req, res) => {
 
   // Update the observations in the database for the specific patient
   db.query(
-    "UPDATE patients SET message = $1 WHERE phonenumber = $2",
+    "UPDATE patients SET message = $1 WHERE phoneNumber = $2",
     [observations, phoneNumber],
     (err) => {
       if (err) {
@@ -120,6 +120,7 @@ app.put("/api/updateObservations", (req, res) => {
     }
   );
 });
+
 
 
 // Start the server
