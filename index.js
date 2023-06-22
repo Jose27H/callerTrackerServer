@@ -185,6 +185,7 @@ app.get('/api/GolferInfo', async (req, res) => {
     } else {
       // Golfer data found
       const golferData = rows[0];
+      console.log(rows[0])
       res.json(golferData);
     }
   } catch (error) {
