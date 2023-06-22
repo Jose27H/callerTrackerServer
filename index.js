@@ -31,6 +31,21 @@ db.query(`
   }
 });
 
+db.query(`CREATE TABLE IF NOT EXISTS golfers (
+  phonenumber text NOT NULL,
+  golname text NOT NULL,
+  pin text NOT NULL,
+  PRIMARY KEY (phonenumber)
+  )
+  `, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log('Table created successfully');
+    }
+  });
+
+
 // Endpoint for handling form submissions
 app.post('/api/form', (req, res) => {
   const { name, email, phoneNumber, month, day, year, message } = req.body;
@@ -122,6 +137,20 @@ app.put("/api/updateObservations", (req, res) => {
   console.log("Update request received: ", phoneNumber, observations);
 });
 
+//this section will deal with golf login
+
+
+app.post('/api/GolfLoginForm',(req,res)=>{
+
+})
+
+app.post('/api/GolfRegisterForm',(req,res)=>{
+  const golferName = req.body.golferName
+  const golferNumber  = req.body.phoneNumber
+  const golferPin = req.body.pin 
+  console.log(golferName+" "+golferNumber+" "+golferPin)
+
+})
 
 
 // Start the server
