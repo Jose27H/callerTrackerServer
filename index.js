@@ -46,7 +46,62 @@ db.query(`CREATE TABLE IF NOT EXISTS golfers (
       console.log('Table created successfully');
     }
   });
+// Create 'rounds' table
+db.query(`CREATE TABLE IF NOT EXISTS rounds (
+  round_id SERIAL PRIMARY KEY,
+  golfer_phonenumber TEXT REFERENCES golfers (phonenumber),
+  course_id INTEGER REFERENCES courses (course_id)
+)`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('Table "rounds" created successfully');
+  }
+});
 
+// Create 'courses' table
+db.query(`CREATE TABLE IF NOT EXISTS courses (
+  course_id SERIAL PRIMARY KEY,
+  course_name TEXT,
+  total_par INTEGER
+)`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('Table "courses" created successfully');
+  }
+});
+
+// Create 'scores' table
+db.query(`CREATE TABLE IF NOT EXISTS scores (
+  score_id SERIAL PRIMARY KEY,
+  round_id INTEGER REFERENCES rounds (round_id),
+  hole_number INTEGER,
+  strokes INTEGER,
+  putts INTEGER,
+  driving_distance INTEGER
+)`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('Table "scores" created successfully');
+  }
+});
+
+// Create 'holes' table
+db.query(`CREATE TABLE IF NOT EXISTS holes (
+  hole_id SERIAL PRIMARY KEY,
+  course_id INTEGER REFERENCES courses (course_id),
+  hole_number INTEGER,
+  hole_par INTEGER,
+  hole_distance INTEGER
+)`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('Table "holes" created successfully');
+  }
+});
 
 // Endpoint for handling form submissions
 app.post('/api/form', (req, res) => {
