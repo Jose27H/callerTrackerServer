@@ -213,6 +213,7 @@ app.post("/api/GolfLoginForm", (req, res) => {
         if (exists) {
           // Matching instance found
           res.json("yes");
+          console.log("yes")
         } else {
           // No matching instance found
           res.json("no");
