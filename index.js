@@ -164,6 +164,33 @@ app.post('/api/GolfRegisterForm', (req, res) => {
 });
 
 
+app.get('/api/GolferInfo', (req, res) => {
+  const golferNumber = req.query.golferNumber;
+
+  // Query the golfers table to fetch golfer data
+  db.query(
+    'SELECT golname,  FROM golfers WHERE phonenumber = ?',
+    [golferNumber],
+    (error, results) => {
+      if (error) {
+        console.error('Error fetching golfer data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        if (results.length === 0) {
+          // No golfer found with the provided golferNumber
+          res.status(404).json({ error: 'Golfer not found' });
+        } else {
+          // Golfer data found
+          const golferData = results[0];
+          res.json(golferData);
+        }
+      }
+    }
+  );
+});
+
+
+
 
 // Start the server
 app.listen(port, () => {
