@@ -166,6 +166,7 @@ app.post('/api/GolfRegisterForm', (req, res) => {
 
 app.get('/api/GolferInfo', (req, res) => {
   const golferNumber = req.query.golferNumber;
+  console.log(golferNumber)
 
   // Query the golfers table to fetch golfer data
   db.query(
@@ -187,6 +188,14 @@ app.get('/api/GolferInfo', (req, res) => {
       }
     }
   );
+
+  
+  
+  
+  
+  
+  
+  
 });
 
 
