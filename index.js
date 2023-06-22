@@ -202,7 +202,7 @@ app.post("/api/GolfLoginForm", (req, res) => {
 
   // Query the golfers table to check if matching instance exists
   db.query(
-    "SELECT COUNT(*) AS count FROM golfers WHERE phonenumber = ? AND pin = ?",
+    "SELECT COUNT(*) AS count FROM golfers WHERE phonenumber = $1 AND pin = $2",
     [phoneNumber, pin],
     (error, results) => {
       if (error) {
@@ -221,6 +221,7 @@ app.post("/api/GolfLoginForm", (req, res) => {
     }
   );
 });
+
 
 app.post('/api/GolfRegisterForm', (req, res) => {
   const golferName = req.body.golferName;
