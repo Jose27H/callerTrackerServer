@@ -169,7 +169,7 @@ app.get('/api/GolferInfo', (req, res) => {
 
   // Query the golfers table to fetch golfer data
   db.query(
-    'SELECT golname,  FROM golfers WHERE phonenumber = ?',
+    'SELECT golname FROM golfers WHERE phonenumber = ?',
     [golferNumber],
     (error, results) => {
       if (error) {
