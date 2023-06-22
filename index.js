@@ -144,13 +144,25 @@ app.post('/api/GolfLoginForm',(req,res)=>{
 
 })
 
-app.post('/api/GolfRegisterForm',(req,res)=>{
-  const golferName = req.body.golferName
-  const golferNumber  = req.body.phoneNumber
-  const golferPin = req.body.pin 
-  console.log(golferName+" "+golferNumber+" "+golferPin)
+app.post('/api/GolfRegisterForm', (req, res) => {
+  const golferName = req.body.golferName;
+  const golferNumber = req.body.phoneNumber;
+  const golferPin = req.body.pin;
 
-})
+  const insertQuery = `INSERT INTO golfers (phonenumber, golname, pin) VALUES ($1, $2, $3)`;
+  const values = [golferNumber, golferName, golferPin];
+
+  db.query(insertQuery, values, (error, result) => {
+    if (error) {
+      console.error("Error inserting values into table:", error);
+      res.sendStatus(500);
+    } else {
+      console.log(golferName + " " + golferNumber + " " + golferPin);
+      res.sendStatus(200);
+    }
+  });
+});
+
 
 
 // Start the server
