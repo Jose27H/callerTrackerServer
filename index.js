@@ -174,17 +174,17 @@ app.get('/api/GolferInfo', async (req, res) => {
 
   try {
     // Query the golfers table to fetch golfer data
-    const results = await dbQuery(
-      'SELECT golname FROM golfers WHERE phonenumber = ?',
+    const { rows } = await pool.query(
+      'SELECT golname FROM golfers WHERE phonenumber = $1',
       [golferNumber]
     );
 
-    if (results.length === 0) {
+    if (rows.length === 0) {
       // No golfer found with the provided golferNumber
       res.status(404).json({ error: 'Golfer not found' });
     } else {
       // Golfer data found
-      const golferData = results[0];
+      const golferData = rows[0];
       res.json(golferData);
     }
   } catch (error) {
