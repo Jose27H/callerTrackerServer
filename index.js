@@ -174,7 +174,7 @@ app.get('/api/GolferInfo', async (req, res) => {
 
   try {
     // Query the golfers table to fetch golfer data
-    const { rows } = await pool.query(
+    const { rows } = await db.query(
       'SELECT golname FROM golfers WHERE phonenumber = $1',
       [golferNumber]
     );
