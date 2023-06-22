@@ -197,20 +197,20 @@ app.put("/api/updateObservations", (req, res) => {
 //this section will deal with golf login
 
 
-app.post("/api/GolfLoginForm", (req, res) => {
+aapp.post("/api/GolfLoginForm", (req, res) => {
   const { phoneNumber, pin } = req.body;
 
   // Query the golfers table to check if matching instance exists
   db.query(
-    "SELECT COUNT(*) AS count FROM golfers WHERE phonenumber = $1 AND pin = $2",
+    "SELECT EXISTS (SELECT 1 FROM golfers WHERE phonenumber = $1 AND pin = $2)",
     [phoneNumber, pin],
     (error, results) => {
       if (error) {
         console.error("Error executing database query:", error);
         res.status(500).json({ error: "Internal Server Error" });
       } else {
-        const count = results[0].count;
-        if (count === 1) {
+        const exists = results[0].exists;
+        if (exists) {
           // Matching instance found
           res.json("yes");
         } else {
@@ -221,6 +221,7 @@ app.post("/api/GolfLoginForm", (req, res) => {
     }
   );
 });
+
 
 
 app.post('/api/GolfRegisterForm', (req, res) => {
