@@ -197,7 +197,7 @@ app.put("/api/updateObservations", (req, res) => {
 //this section will deal with golf login
 
 
-aapp.post("/api/GolfLoginForm", (req, res) => {
+app.post("/api/GolfLoginForm", (req, res) => {
   const { phoneNumber, pin } = req.body;
 
   // Query the golfers table to check if matching instance exists
