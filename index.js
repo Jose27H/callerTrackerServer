@@ -209,7 +209,7 @@ app.post("/api/GolfLoginForm", (req, res) => {
         console.error("Error executing database query:", error);
         res.status(500).json({ error: "Internal Server Error" });
       } else {
-        const exists = results[0].exists;
+        const exists = results.rows[0].exists;
         if (exists) {
           // Matching instance found
           res.json("yes");
