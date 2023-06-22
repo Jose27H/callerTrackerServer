@@ -1,6 +1,8 @@
 const express = require('express');
 const db = require('./db'); // Assuming db.js exports the pool object
 const cors = require('cors');
+const util = require('util');
+const dbQuery = util.promisify(db.query).bind(db);
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -164,38 +166,31 @@ app.post('/api/GolfRegisterForm', (req, res) => {
 });
 
 
-app.get('/api/GolferInfo', (req, res) => {
+
+
+app.get('/api/GolferInfo', async (req, res) => {
   const golferNumber = req.query.golferNumber;
-  console.log(golferNumber)
+  console.log(golferNumber);
 
-  // Query the golfers table to fetch golfer data
-  db.query(
-    'SELECT golname FROM golfers WHERE phonenumber = ?',
-    [golferNumber],
-    (error, results) => {
-      if (error) {
-        console.error('Error fetching golfer data:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        if (results.length === 0) {
-          // No golfer found with the provided golferNumber
-          res.status(404).json({ error: 'Golfer not found' });
-        } else {
-          // Golfer data found
-          const golferData = results[0];
-          res.json(golferData);
-        }
-      }
+  try {
+    // Query the golfers table to fetch golfer data
+    const results = await dbQuery(
+      'SELECT golname FROM golfers WHERE phonenumber = ?',
+      [golferNumber]
+    );
+
+    if (results.length === 0) {
+      // No golfer found with the provided golferNumber
+      res.status(404).json({ error: 'Golfer not found' });
+    } else {
+      // Golfer data found
+      const golferData = results[0];
+      res.json(golferData);
     }
-  );
-
-  
-  
-  
-  
-  
-  
-  
+  } catch (error) {
+    console.error('Error fetching golfer data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
