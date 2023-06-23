@@ -284,6 +284,7 @@ app.get('/api/CourseList', (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     } else {
       const courseNames = result.rows.map(row => row.course_name);
+      console.log(courseNames)
       res.json(courseNames);
     }
   });
