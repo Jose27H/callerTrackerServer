@@ -273,6 +273,21 @@ app.get('/api/GolferInfo', async (req, res) => {
   }
 });
 
+//section that will populate the courses dropdown
+
+app.get('/api/CourseList', (req, res) => {
+  const query = 'SELECT course_name FROM courses';
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Error fetching course list:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      const courseNames = result.rows.map(row => row.course_name);
+      res.json(courseNames);
+    }
+  });
+});
 
 
 
