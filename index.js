@@ -160,7 +160,7 @@ app.get("/api/patientData", (req, res) => {
         // Return the patient data if found
         res.json({
           name: row.name,
-          phoneNumber: row.phoneNumber,
+          number: row.phoneNumber,
           email: row.email,
           message: row.message,
         });
