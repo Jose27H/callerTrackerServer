@@ -126,6 +126,7 @@ app.post('/api/form', (req, res) => {
 
 // Endpoint for handling phone check
 app.post('/api/formnumber', (req, res) => {
+  console.log(req.body);
   const { number } = req.body;
 
   db.query('SELECT COUNT(*) as count, id FROM patients WHERE phoneNumber = $1', [number], (err, result) => {
