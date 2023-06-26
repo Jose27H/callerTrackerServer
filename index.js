@@ -157,6 +157,7 @@ app.get("/api/patientData", (req, res) => {
         res.status(500).json({ error: "Internal server error" });
       } else if (result.rows.length > 0) {
         const row = result.rows[0];
+        console.log(result.rows[0])
         // Return the patient data if found
         res.json({
           name: row.name,
