@@ -126,16 +126,15 @@ app.post('/api/form', (req, res) => {
 
 // Endpoint for handling phone check
 app.post('/api/formnumber', (req, res) => {
-  console.log(req.body);
   const { number } = req.body;
 
-  db.query('SELECT COUNT(*) as count, id FROM patients WHERE phoneNumber = $1', [number], (err, result) => {
+  db.query('SELECT COUNT(*) as count, id FROM patients WHERE phoneNumber = $1 GROUP BY id', [number], (err, result) => {
     if (err) {
       console.error(err);
       res.status(500).json({ error: 'Failed to check phone number' });
     } else {
       const row = result.rows[0];
-      if (row.count > 0) {
+      if (row && row.count > 0) {
         res.status(200).json({ info: 'yes', pnumber: row.id });
       } else {
         res.status(200).json({ info: 'Failed to submit form' });
