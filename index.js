@@ -105,12 +105,12 @@ db.query(`CREATE TABLE IF NOT EXISTS holes (
 
 // Endpoint for handling form submissions
 app.post('/api/form', (req, res) => {
-  const { name, email, phoneNumber, month, day, year, message } = req.body;
+  const { name, email, phoneNumber, month, day, year, state, message } = req.body;
   const dob = `${month}-${day}-${year}`;
 
   db.query(
-    'INSERT INTO patients (name, phoneNumber, email, dob, message) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-    [name, phoneNumber, email, dob, message],
+    'INSERT INTO patients (name, phoneNumber, email, dob,state, message) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+    [name, phoneNumber, email, dob ,state, message],
     (err, result) => {
       if (err) {
         console.error(err);
@@ -118,7 +118,7 @@ app.post('/api/form', (req, res) => {
       } else {
         const patientId = result.rows[0].id;
         res.status(200).json({ message: 'Form submitted successfully', patientId });
-        console.log(name, email, phoneNumber, dob, message);
+        console.log(name, email, phoneNumber, dob, state, message);
       }
     }
   );
