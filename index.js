@@ -50,7 +50,8 @@ db.query(`CREATE TABLE IF NOT EXISTS golfers (
 db.query(`CREATE TABLE IF NOT EXISTS rounds (
   round_id SERIAL PRIMARY KEY,
   golfer_phonenumber TEXT REFERENCES golfers (phonenumber),
-  course_id INTEGER REFERENCES courses (course_id)
+  course_id INTEGER REFERENCES courses (course_id),
+  date DATE DEFAULT CURRENT_DATE
 )`, (err) => {
   if (err) {
     console.error(err);
@@ -58,6 +59,7 @@ db.query(`CREATE TABLE IF NOT EXISTS rounds (
     console.log('Table "rounds" created successfully');
   }
 });
+
 
 // Create 'courses' table
 db.query(`CREATE TABLE IF NOT EXISTS courses (
