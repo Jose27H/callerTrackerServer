@@ -300,11 +300,40 @@ app.get('/api/CourseList', (req, res) => {
 
 
 
-// POST route to handle the StartRound request
 app.post('/api/StartRound', (req, res) => {
-console.log(req.body)
-  }
-);
+  const golferNumber = req.body.golferNumber;
+  const courseName = req.body.courseName;
+
+  db.query(
+    "SELECT course_id FROM courses WHERE course_name = $1",
+    [courseName],
+    (error, results) => {
+      if (error) {
+        console.error("Error executing database query:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const courseId = results.rows[0]?.course_id;
+      if (!courseId) {
+        return res.status(404).send('Course not found');
+      }
+
+      db.query(
+        `INSERT INTO rounds (golfer_phonenumber, course_id, date)
+         VALUES ($1, $2, CURRENT_DATE)`,
+        [golferNumber, courseId],
+        (insertError) => {
+          if (insertError) {
+            console.error("Error inserting round record:", insertError);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+          res.send(`Course ID for '${courseName}': ${courseId}`);
+        }
+      );
+    }
+  );
+});
 
 // Start the server
 app.listen(3000, () => {
