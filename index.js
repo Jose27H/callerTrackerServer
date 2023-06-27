@@ -306,6 +306,22 @@ app.get('/api/CourseList', (req, res) => {
 
 
 
+
+// POST route to handle the StartRound request
+app.post('/api/StartRound', (req, res) => {
+console.log(req.body)
+  }
+);
+
+// Start the server
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
+
+
+
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
