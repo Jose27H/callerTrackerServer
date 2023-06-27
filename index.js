@@ -47,6 +47,14 @@ db.query(`CREATE TABLE IF NOT EXISTS golfers (
     }
   });
 // Create 'rounds' table
+
+db.query(`DROP TABLE IF EXISTS rounds`, (err) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('Table "rounds" deleted successfully');
+  }
+});
 db.query(`CREATE TABLE IF NOT EXISTS rounds (
   round_id SERIAL PRIMARY KEY,
   golfer_phonenumber TEXT REFERENCES golfers (phonenumber),
