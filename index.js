@@ -335,11 +335,33 @@ app.post('/api/StartRound', (req, res) => {
   );
 });
 
-// Start the server
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
 
+// Endpoint to fetch patients with search term and pagination -- to autofill the table
+app.get('/api/patients', async (req, res) => {
+  const { query, page } = req.query;
+  const pageSize = 10;
+  const offset = (page - 1) * pageSize;
+
+  try {
+    let queryStr = `SELECT * FROM patients`;
+
+    // Check if query exists
+    if (query) {
+      // Construct the WHERE clause to search for name, email, or phone number
+      queryStr += ` WHERE name ILIKE '%${query}%' OR email ILIKE '%${query}%' OR phoneNumber ILIKE '%${query}%'`;
+    }
+
+    // Execute the query with pagination
+    queryStr += ` LIMIT ${pageSize} OFFSET ${offset}`;
+    const result = await db.query(queryStr);
+    const patients = result.rows;
+
+    res.json({ patients });
+  } catch (error) {
+    console.error('Error fetching patients:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 
