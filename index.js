@@ -338,17 +338,17 @@ app.post('/api/StartRound', (req, res) => {
 
 // Endpoint to fetch patients with search term and pagination
 app.get('/api/patients', async (req, res) => {
-  const { query, page } = req.query;
+  const { search, page } = req.query;
   const pageSize = 10;
-  const offset = (page - 1) * pageSize;
+  const offset = (parseInt(page) - 1) * pageSize;
 
   try {
     let queryStr = `SELECT * FROM patients`;
 
-    // Check if query exists
-    if (query) {
+    // Check if search term exists
+    if (search && search !== '?') {
       // Construct the WHERE clause to search for name, email, or phone number
-      queryStr += ` WHERE name ILIKE '%${query}%' OR email ILIKE '%${query}%' OR phoneNumber ILIKE '%${query}%'`;
+      queryStr += ` WHERE name ILIKE '%${search}%' OR email ILIKE '%${search}%' OR phoneNumber ILIKE '%${search}%'`;
     }
 
     // Add ORDER BY clause to sort by ID in descending order
@@ -365,6 +365,7 @@ app.get('/api/patients', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 
