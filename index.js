@@ -336,7 +336,7 @@ app.post('/api/StartRound', (req, res) => {
 });
 
 
-// Endpoint to fetch patients with search term and pagination -- to autofill the table
+// Endpoint to fetch patients with search term and pagination
 app.get('/api/patients', async (req, res) => {
   const { query, page } = req.query;
   const pageSize = 10;
@@ -351,6 +351,9 @@ app.get('/api/patients', async (req, res) => {
       queryStr += ` WHERE name ILIKE '%${query}%' OR email ILIKE '%${query}%' OR phoneNumber ILIKE '%${query}%'`;
     }
 
+    // Add ORDER BY clause to sort by ID in descending order
+    queryStr += ` ORDER BY id DESC`;
+
     // Execute the query with pagination
     queryStr += ` LIMIT ${pageSize} OFFSET ${offset}`;
     const result = await db.query(queryStr);
@@ -362,7 +365,6 @@ app.get('/api/patients', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
 
